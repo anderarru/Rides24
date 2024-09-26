@@ -27,6 +27,10 @@
 <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
+	<sonar.organization>ander-arruti</sonar.organization>
+	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	<sonar.projectKey>ander-arruti_rides24</sonar.projectKey>
+	<sonar.login>a8cf71835eca157780d1f2c7cb036af2523a4983</sonar.login>
 </properties>
 
 <!-- https://mvnrepository.com/artifact/junit/junit -->
