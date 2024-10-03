@@ -30,6 +30,7 @@ public class Driver extends User implements Serializable {
 		super(username, passwd, "Driver");
 	}
 
+	@Override
 	public String toString() {
 		return (super.toString());
 	}

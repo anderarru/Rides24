@@ -87,6 +87,7 @@ public class ObjectdbManagerServer extends JDialog {
 								System.exit(1);
 							
 						} catch (Exception e1) {
+							System.out.println("Exception");
 						}
 						System.exit(1);
 					}

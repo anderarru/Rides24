@@ -1,6 +1,7 @@
 package configuration;
 
 import java.io.File;
+import java.io.Serializable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,7 +14,7 @@ import org.w3c.dom.NodeList;
 /**
  * It provides the configuration data from the "resources/config.xml" XML file
  */
-public class ConfigXML {
+public class ConfigXML implements Serializable{
 	
 	private String configFile = "src/main/resources/config.xml";
 		
