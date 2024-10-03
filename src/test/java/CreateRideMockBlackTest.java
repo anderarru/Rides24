@@ -164,7 +164,7 @@ public class CreateRideMockBlackTest {
 	public void test3() {
 		String driverUsername="Test driver";
 		String rideFrom="Donostia";
-		String rideTo="null";
+		String rideTo=null;
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date rideDate=null;;
