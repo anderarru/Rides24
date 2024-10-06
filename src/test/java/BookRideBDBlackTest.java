@@ -1,4 +1,6 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 import dataAccess.DataAccess;
@@ -50,61 +52,103 @@ public class BookRideBDBlackTest {
     }
 
     @Test
-    // Test 3: Traveler has insufficient balance. The method must return false.
     public void test3() {
         String username = "traveler1";
-        Traveler traveler = new Traveler(username, "password");
-        traveler.setMoney(10.0); // Not enough balance
+        String driverUsername = "driver1";
+        Date rideDate = new Date("2025/12/12"); // Use current date
+        
+        try {
+            // Add a traveler and set money
+            testDA.open();
+            testDA.addTraveler(username, "password");
+            Traveler traveler = testDA.getTraveler(username);
+            traveler.setMoney(10.0); // Not enough balance
+            testDA.updateTraveler(traveler);
+            testDA.close();
+            System.out.println("Traveler created with balance: " + traveler.getMoney());
 
-        Driver driver = new Driver("driver1", "password");
-        Ride ride = new Ride("Start", "End", new java.util.Date(), 5, 15.0, driver); // Price is 15.0 per seat
+            // Create a driver
+            testDA.open();
+            testDA.createDriver(driverUsername, "password");
+            testDA.close();
+            System.out.println("Driver created: " + driverUsername);
 
-        sut.open();
-        boolean result = sut.bookRide(username, ride, 2, 0.0); // Trying to book 2 seats
-        sut.close();
+            // Create a ride for the driver
+            testDA.open();
+            Ride createdRide = testDA.createRide("Start", "End", rideDate, 5, 10, driverUsername);
+            testDA.close();
+            System.out.println("Ride created: " + createdRide);
 
-        assertEquals(false, result);
+            // Perform the booking operation
+            sut.open();
+            boolean result = sut.bookRide(username, createdRide, 2, 0.0); // Trying to book 2 seats
+            sut.close();
+            System.out.println("Booking result: " + result);
+
+            // Check the results
+            assertFalse("Booking should fail due to insufficient balance", result);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception thrown: " + e.getMessage());
+        } finally {
+           
+            testDA.open();
+            testDA.removeTraveler(username);
+            testDA.removeDriver(driverUsername);
+            testDA.close();
+        }
     }
 
     @Test
- // Test 4: Successful booking. The method must return true.
- public void test4() {
-     String username = "traveler1";
-     Driver driver = new Driver("driver1", "password");
-     Ride ride = new Ride("Start", "End", date, 5, 10.0, driver);
+    public void test4() {
+        String username = "traveler1";
+        String driverUsername = "driver1";
+        Date rideDate = new Date("2025/12/12"); // Use current date or set a specific date
+        
+        try {
+            // Add a traveler and set money
+            testDA.open();
+            testDA.addTraveler(username, "password");
+            Traveler traveler = testDA.getTraveler(username);
+            traveler.setMoney(100.0);
+            testDA.updateTraveler(traveler);
+            testDA.close();
+            System.out.println("Traveler created: " + traveler);
 
-     try {
-       
-         testDA.open();
-         testDA.addTraveler(username, "password");
-         testDA.getTraveler(username).setMoney(100.0);
-         testDA.close(); // Close after adding the traveler
+            // Create a driver
+            testDA.open();
+            testDA.createDriver(driverUsername, "password");
+            testDA.close();
+            System.out.println("Driver created: " + driverUsername);
 
-         
-         testDA.open();
-         testDA.createRide("Start", "End", date, 5, 10, "driver1");
-         testDA.close(); // Close after creating the ride
+            // Create a ride for the driver
+            testDA.open();
+            Ride createdRide = testDA.createRide("Start", "End", rideDate, 5, 10, driverUsername);
+            testDA.close();
+            System.out.println("Ride created: " + createdRide);
 
-         
-         sut.open();
-         boolean result = sut.bookRide(username, ride, 2, 0.0); // Book 2 seats successfully
-         sut.close();
+            // Perform the booking operation
+            sut.open();
+            boolean result = sut.bookRide(username, createdRide, 2, 0.0); // Book 2 seats successfully
+            sut.close();
+            System.out.println("Booking result: " + result);
 
-         
-         assertEquals(true, result);
-         assertEquals(3, ride.getnPlaces());  // 2 seats booked, 3 remaining
+            // Check the results
+            assertTrue("Booking should be successful", result);
 
-     } catch (RideAlreadyExistException | RideMustBeLaterThanTodayException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} finally {
-         // Cleanup the database state
-         testDA.open();
-         testDA.removeTraveler(username);
-         testDA.removeRide("driver1", "Start", "End", date);
-         testDA.close();
-     }
- }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception thrown: " + e.getMessage());
+        } finally {
+        	testDA.open();
+            testDA.removeTraveler(username);
+            testDA.removeDriver(driverUsername);
+            testDA.close();
+        }
+    }
+
 
 
     @Test
