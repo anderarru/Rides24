@@ -63,10 +63,7 @@ public class BusinessLogicServer extends JDialog {
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
 		initializeTextArea();
-		{
-			textArea = new JTextArea();
-			contentPanel.add(textArea);
-		}
+		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
