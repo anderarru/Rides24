@@ -128,11 +128,13 @@ public class DataAccess {
 
 			String madrid ="Madrid";
 					
-			driver1.addRide("Donostia", madrid, date2, 5, 20); //ride1
-			driver1.addRide("Irun", "Donostia", date2, 5, 2); //ride2
-			driver1.addRide(madrid, "Donostia", date3, 5, 5); //ride3
-			driver1.addRide("Barcelona", madrid, date4, 0, 10); //ride4
-			driver2.addRide("Donostia", "Hondarribi", date1, 5, 3); //ride5
+			String donostia = "Donostia";
+			
+			driver1.addRide(donostia, madrid, date2, 5, 20); //ride1
+			driver1.addRide("Irun", donostia, date2, 5, 2); //ride2
+			driver1.addRide(madrid, donostia, date3, 5, 5); //ride3
+			driver1.addRide(donostia, madrid, date4, 0, 10); //ride4
+			driver2.addRide(donostia, "Hondarribi", date1, 5, 3); //ride5
 
 			Ride ride1 = driver1.getCreatedRides().get(0);
 			Ride ride2 = driver1.getCreatedRides().get(1);
