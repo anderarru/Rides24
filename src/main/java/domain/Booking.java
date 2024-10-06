@@ -18,6 +18,8 @@ public class Booking implements Serializable {
 	private Ride ride;
 	@ManyToOne
 	private Traveler traveler;
+	 public static final String STATUS_REJECTED = "Rejected";
+	 public static final String STATUS_ACCEPTED = "Accepted";
 	private int seats;
 	private String status;
 	private double deskontua;
