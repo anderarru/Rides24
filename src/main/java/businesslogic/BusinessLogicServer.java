@@ -61,6 +61,8 @@ public class BusinessLogicServer extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
+		
+		initializeTextArea();
 		{
 			textArea = new JTextArea();
 			contentPanel.add(textArea);
@@ -126,6 +128,10 @@ public class BusinessLogicServer extends JDialog {
 		  }
 
 	  }
+	}
+	private void initializeTextArea() {
+		textArea = new JTextArea();
+		contentPanel.add(textArea);
 	}
 }
 
