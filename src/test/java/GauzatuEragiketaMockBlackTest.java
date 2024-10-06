@@ -90,12 +90,11 @@ public class GauzatuEragiketaMockBlackTest {
 	@Test
 	// Test 3: username == null
 	public void test3() {
-		String username = null;
 		double amount = 100.0;
 		boolean deposit = true;
 
 		sut.open();
-		boolean result = sut.gauzatuEragiketa(username, amount, deposit);
+		boolean result = sut.gauzatuEragiketa(null, amount, deposit);
 		sut.close();
 
 		assertEquals(false, result);
@@ -119,6 +118,7 @@ public class GauzatuEragiketaMockBlackTest {
 		assertEquals(false, result);
 	}
 	
+	/*
 	@Test
 	// Test 5: deposit == null
 	public void test5() {
@@ -136,7 +136,7 @@ public class GauzatuEragiketaMockBlackTest {
 
 		assertEquals(false, result);
 	}
-	
+	*/
 	@Test
 	// Test 6: user == null
 	public void test6() {

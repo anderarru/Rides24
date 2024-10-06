@@ -134,6 +134,30 @@ public class TestDataAccess {
 
 		}
 
+		public Driver createDriverWithMoney(String name, String pass, double money) {
+			System.out.println(">> TestDataAccess: createDriverWithMoney");
+			Driver driver=null;
+				db.getTransaction().begin();
+				try {
+				    driver=new Driver(name,pass);
+				    driver.setMoney(money);
+					db.persist(driver);
+					db.getTransaction().commit();
+				}
+				catch (Exception e){
+					e.printStackTrace();
+				}
+				return driver;
+	    }
+		public Driver getUser(String username) {
+			System.out.println(">> TestDataAccess: getUser");
+			Driver d = db.find(Driver.class, username);
+			if (d!=null) {
+				return d;
+			} else 
+			return null;
+		}
+		
 
 		
 }
