@@ -1,6 +1,10 @@
 package dataAccess;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +38,7 @@ public class DataAccess {
 	public DataAccess() {
 		if (c.isDatabaseInitialized()) {
 			String fileName = c.getDbFilename();
-
+/*
 			File fileToDelete = new File(fileName);
 			if (fileToDelete.delete()) {
 				File fileToDeleteTemp = new File(fileName + "$");
@@ -43,8 +47,26 @@ public class DataAccess {
 				System.out.println("File deleted");
 			} else {
 				System.out.println("Operation failed");
-			}
+			}*/
+	            
+	            Path pathToDelete = Paths.get(fileName);
+	            Path pathToDeleteTemp = Paths.get(fileName + "$");
+	            
+	            try {
+	                Files.delete(pathToDelete);
+
+	                Files.deleteIfExists(pathToDeleteTemp);
+
+	                System.out.println("File deleted");
+	                
+	            } catch (IOException e) {
+	                System.out.println("Operation failed: " + e.getMessage());
+	                e.printStackTrace();
+	            }
+	        
+	        
 		}
+		
 		open();
 		if (c.isDatabaseInitialized()) {
 			initializeDB();
