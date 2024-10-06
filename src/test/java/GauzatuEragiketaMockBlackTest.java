@@ -174,20 +174,20 @@ public class GauzatuEragiketaMockBlackTest {
 	@Test
 	// Test 8: username != null, amount > 0, deposit != null, user != null, currentMoney >= 0, amount > currentMoney
 	public void test8() {
-		String username = "user7";
-		double amount = 200.0;
-		boolean deposit = false;
+	    String username = "user7";
+	    double amount = 200.0;
+	    boolean deposit = false;
 
-		User user = new Traveler(username,"a");
-		user.setMoney(100);
-		Mockito.when(db.find(User.class, username)).thenReturn(user);
+	    User user = new Traveler(username,"a");
+	    user.setMoney(100);
+	    Mockito.when(db.find(User.class, username)).thenReturn(user);
 
-		sut.open();
-		boolean result = sut.gauzatuEragiketa(username, amount, deposit);
-		sut.close();
+	    sut.open();
+	    boolean result = sut.gauzatuEragiketa(username, amount, deposit);
+	    sut.close();
 
-		assertEquals(true, result);
-		assertEquals(0, user.getMoney(), 0);
+	    assertEquals(true, result); 
+	    assertEquals(0, user.getMoney(), 0);
 	}
 	
 	@Test

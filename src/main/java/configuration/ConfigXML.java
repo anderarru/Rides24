@@ -16,6 +16,11 @@ import org.w3c.dom.NodeList;
  */
 public class ConfigXML implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String configFile = "src/main/resources/config.xml";
 		
 	private String businessLogicNode;
@@ -85,7 +90,7 @@ public class ConfigXML implements Serializable{
 
 			  
 				//Two possible values: true (no instance of RemoteServer needs to be launched) or false (RemoteServer needs to be run first)
-			  String value= ((Element)config.getElementsByTagName("businesslogic").item(0)).getAttribute("local");
+			  String value= ((Element)config.getElementsByTagName("businessLogic").item(0)).getAttribute("local");
 			  businessLogicLocal=value.equals("true");
 
 			  businessLogicNode = getTagValue("businessLogicNode", config);

@@ -118,6 +118,47 @@ public class GauzatuEragiketaMockWhiteTest {
 	        // Configure the state through mocks
 	        User user = new Traveler(username, "a");
 	        user.setMoney(100);
+	        
+	        // Mocking db.find() directly instead of sut.getUser()
+	        Mockito.when(db.find(User.class, username)).thenReturn(user); // Mock find
+
+	        // Verifica que el usuario fue encontrado correctamente
+	        System.out.println("User found: " + user);
+
+	        // Invoke System Under Test (sut)
+	        sut.open();
+	        boolean result = sut.gauzatuEragiketa(username, amount, deposit);
+
+	        // Debugging
+	        System.out.println("Result: " + result);
+	        System.out.println("User money after operation: " + user.getMoney());
+
+	        // Verificar que el dinero fue incrementado
+	        assertEquals(true, result);
+	        assertEquals(140, user.getMoney(), 0); // Verifica que el dinero se ha incrementado correctamente
+
+	        // Verificar que se hizo commit
+	        Mockito.verify(et).commit();
+	    } catch (Exception e) {
+	        fail();
+	    } finally {
+	        sut.close();
+	    }
+	}
+
+
+	@Test
+	// Test 4: The User exists in the DB and amount > currentMoney. The test must return true.
+	public void test4() {
+	    try {
+	        // Define parameters
+	        String username = "proba";
+	        double amount = 40;
+	        boolean deposit = false;
+
+	        // Configure the state through mocks
+	        User user = new Traveler(username,"a");
+	        user.setMoney(30);
 	        Mockito.when(db.find(User.class, username)).thenReturn(user);
 
 	        // Invoke System Under Test (sut)
@@ -126,7 +167,10 @@ public class GauzatuEragiketaMockWhiteTest {
 
 	        // Verify the results
 	        assertEquals(true, result);
-	        assertEquals(140, user.getMoney(), 0); // Verifica que el dinero se ha incrementado correctamente
+	        assertEquals(0, user.getMoney(), 0);
+
+	        // Verificar que se hizo commit
+	        Mockito.verify(et).commit();
 	    } catch (Exception e) {
 	        fail();
 	    } finally {
@@ -134,59 +178,36 @@ public class GauzatuEragiketaMockWhiteTest {
 	    }
 	}
 
-	@Test
-	// Test 4: The User exists in the DB and amount > currentMoney. The test must return true.
-	public void test4() {
-		try {
-			// Define parameters
-			String username = "proba";
-			double amount = 40;
-			boolean deposit = false;
-
-			// Configure the state through mocks
-			User user = new Traveler(username,"a");
-			user.setMoney(30);
-			Mockito.when(db.find(User.class, username)).thenReturn(user);
-
-			// Invoke System Under Test (sut)
-			sut.open();
-			boolean result = sut.gauzatuEragiketa(username, amount, deposit);
-
-			// Verify the results
-			assertEquals(true, result);
-			assertEquals(0, user.getMoney(), 0);
-		} catch (Exception e) {
-			fail();
-		} finally {
-			sut.close();
-		}
-	}
 	
 	@Test
 	// Test 5: The User exists in the DB and amount < currentMoney. The test must return true.
 	public void test5() {
-		try {
-			// Define parameters
-			String username = "proba";
-			double amount = 40;
-			boolean deposit = false;
+	    try {
+	        // Define parameters
+	        String username = "proba";
+	        double amount = 40;
+	        boolean deposit = false;
 
-			// Configure the state through mocks
-			User user = new Traveler(username,"a");
-			user.setMoney(100);
-			Mockito.when(db.find(User.class, username)).thenReturn(user);
+	        // Configure the state through mocks
+	        User user = new Traveler(username,"a");
+	        user.setMoney(100);
+	        Mockito.when(db.find(User.class, username)).thenReturn(user);
 
-			// Invoke System Under Test (sut)
-			sut.open();
-			boolean result = sut.gauzatuEragiketa(username, amount, deposit);
+	        // Invoke System Under Test (sut)
+	        sut.open();
+	        boolean result = sut.gauzatuEragiketa(username, amount, deposit);
 
-			// Verify the results
-			assertEquals(true, result);
-			assertEquals(60, user.getMoney(), 0);
-		} catch (Exception e) {
-			fail();
-		} finally {
-			sut.close();
-		}
+	        // Verify the results
+	        assertEquals(true, result);
+	        assertEquals(60, user.getMoney(), 0);
+
+	        // Verificar que se hizo commit
+	        Mockito.verify(et).commit();
+	    } catch (Exception e) {
+	        fail();
+	    } finally {
+	        sut.close();
+	    }
 	}
 }
+
