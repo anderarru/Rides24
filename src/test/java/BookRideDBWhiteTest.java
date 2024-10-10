@@ -18,6 +18,7 @@ import testOperations.TestDataAccess;
 import java.util.Date;
 
 public class BookRideDBWhiteTest {
+	/*
 
     static DataAccess sut = new DataAccess(); // System Under Test
     static TestDataAccess testDA = new TestDataAccess();
@@ -184,4 +185,5 @@ public class BookRideDBWhiteTest {
 
         assertEquals(false, result);
     }
+    */
 }

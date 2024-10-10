@@ -1,4 +1,4 @@
-/*
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BookRideMockBlackTest {
+	/*
     static DataAccess sut;
 
     protected MockedStatic<Persistence> persistenceMock;
@@ -175,5 +176,5 @@ public class BookRideMockBlackTest {
 
         assertEquals(false, result);
     }
+    */
 }
-*/
