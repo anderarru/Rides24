@@ -43,7 +43,6 @@ public class DataAccess {
 			if (fileToDelete.delete()) {
 				File fileToDeleteTemp = new File(fileName + "$");
 				fileToDeleteTemp.delete();
-
 				System.out.println("File deleted");
 			} else {
 				System.out.println("Operation failed");

@@ -24,7 +24,7 @@ import domain.Traveler;
 import java.util.Date;
 
 public class BookRideMockWhiteTest {
-	/*
+	
 
     static DataAccess sut;
     protected MockedStatic<Persistence> persistenceMock;
@@ -189,7 +189,7 @@ public class BookRideMockWhiteTest {
             sut.close();
         }
     }
-    */
+    
 }
 
 

@@ -137,6 +137,7 @@ public class GauzatuEragiketaMockBlackTest {
 		assertEquals(false, result);
 	}
 	*/
+	
 	@Test
 	// Test 6: user == null
 	public void test6() {

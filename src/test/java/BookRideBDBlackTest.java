@@ -16,7 +16,7 @@ import testOperations.TestDataAccess;
 import java.util.Date;
 
 public class BookRideBDBlackTest {
-/*
+
     static DataAccess sut = new DataAccess();
     static TestDataAccess testDA = new TestDataAccess();
     Date date = new Date("2025/12/12");
@@ -231,5 +231,5 @@ public class BookRideBDBlackTest {
         testDA.removeTraveler(username);
         testDA.close();
     }
-    */
+    
 }

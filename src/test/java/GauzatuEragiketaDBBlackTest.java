@@ -1,3 +1,5 @@
+
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -136,7 +138,7 @@ public class GauzatuEragiketaDBBlackTest {
             testDA.close();
         }
     }
-*/
+    */
     @Test
     // Caso 6: user == null (no user in the DB)
     public void test6() {
