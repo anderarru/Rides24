@@ -672,26 +672,11 @@ public class DataAccess {
 		}
 	}
 
-	public void cancelRide(Ride ride) {
+		public void cancelRide(Ride ride) {
 		try {
 			db.getTransaction().begin();
-
 			for (Booking booking : ride.getBookings()) {
-				if (booking.getStatus().equals("Accepted") || booking.getStatus().equals("NotDefined")) {
-					double price = booking.prezioaKalkulatu();
-					Traveler traveler = booking.getTraveler();
-					double frozenMoney = traveler.getIzoztatutakoDirua();
-					traveler.setIzoztatutakoDirua(frozenMoney - price);
-
-					double money = traveler.getMoney();
-					traveler.setMoney(money + price);
-					db.merge(traveler);
-					db.getTransaction().commit();
-					addMovement(traveler, "BookDeny", price);
-					db.getTransaction().begin();
-				}
-				booking.setStatus(Booking.STATUS_REJECTED);
-				db.merge(booking);
+				CancelBookings(booking);
 			}
 			ride.setActive(false);
 			db.merge(ride);
@@ -702,8 +687,27 @@ public class DataAccess {
 				db.getTransaction().rollback();
 			}
 			e.printStackTrace();
-		}
+		}}
+	
+    
+	public void CancelBookings(Booking booking) {
+		if (booking.getStatus().equals("Accepted") || booking.getStatus().equals("NotDefined")) {
+		double price = booking.prezioaKalkulatu();
+		Traveler traveler = booking.getTraveler();
+		double frozenMoney = traveler.getIzoztatutakoDirua();
+		traveler.setIzoztatutakoDirua(frozenMoney - price);
+		
+		double money = traveler.getMoney();
+		traveler.setMoney(money + price);
+		db.merge(traveler);
+		db.getTransaction().commit();
+		addMovement(traveler, "BookDeny", price);
+		db.getTransaction().begin();
 	}
+	booking.setStatus(Booking.STATUS_REJECTED);
+	db.merge(booking);
+	}
+	
 
 	public List<Ride> getRidesByDriver(String username) {
 		try {
