@@ -541,45 +541,73 @@ public class DataAccess {
 			db.getTransaction().rollback();
 		}
 	}
-
+	
+	//BookRide method refactored:
+	
+	//This method books a ride based on the username, selected ride, number of seats, and discount.
+    // Performs validations, creates the booking, and updates the user and ride information, which is done in separate methods.	
 	public boolean bookRide(String username, Ride ride, int seats, double desk) {
-		try {
-			db.getTransaction().begin();
+	    try {
+	        db.getTransaction().begin();
 
-			Traveler traveler = getTraveler(username);
-			if (traveler == null) {
-				return false;
-			}
+	        Traveler traveler = validateBookingRequest(username, ride, seats, desk);
+	        if (traveler == null) {
+	            return false;
+	        }
 
-			if (ride.getnPlaces() < seats) {
-				return false;
-			}
+	        processBooking(traveler, ride, seats, desk);
+	        db.getTransaction().commit();
+	        return true;
 
-			double ridePriceDesk = (ride.getPrice() - desk) * seats;
-			double availableBalance = traveler.getMoney();
-			if (availableBalance < ridePriceDesk) {
-				return false;
-			}
-
-			Booking booking = new Booking(ride, traveler, seats);
-			booking.setTraveler(traveler);
-			booking.setDeskontua(desk);
-			db.persist(booking);
-
-			ride.setnPlaces(ride.getnPlaces() - seats);
-			traveler.addBookedRide(booking);
-			traveler.setMoney(availableBalance - ridePriceDesk);
-			traveler.setIzoztatutakoDirua(traveler.getIzoztatutakoDirua() + ridePriceDesk);
-			db.merge(ride);
-			db.merge(traveler);
-			db.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        db.getTransaction().rollback();
+	        return false;
+	    }
 	}
+	
+	// This method validates the booking request based on the username, available seats, and the user's balance.
+	private Traveler validateBookingRequest(String username, Ride ride, int seats, double desk) {
+	    Traveler traveler = getTraveler(username);
+	    if (traveler == null || ride.getnPlaces() < seats || traveler.getMoney() < calculateRideCost(ride, seats, desk)) {
+	        return null;
+	    }
+	    return traveler;
+	}
+	
+	//This method processes the booking: creates the booking and updates the traveler and ride information.
+	private void processBooking(Traveler traveler, Ride ride, int seats, double desk) {
+	    Booking booking = createBooking(traveler, ride, seats, desk);
+	    updateTravelerAndRide(traveler, ride, seats, desk);
+	    db.persist(booking);
+	}
+	
+	//This method creates a new Booking object and sets the discount.
+	private Booking createBooking(Traveler traveler, Ride ride, int seats, double desk) {
+	    Booking booking = new Booking(ride, traveler, seats);
+	    booking.setTraveler(traveler);
+	    booking.setDeskontua(desk);
+	    return booking;
+	}
+	
+	//This method updates the traveler and ride information: money, frozen money, and available seats.
+	private void updateTravelerAndRide(Traveler traveler, Ride ride, int seats, double desk) {
+	    double ridePriceDesk = calculateRideCost(ride, seats, desk);
+	    traveler.setMoney(traveler.getMoney() - ridePriceDesk);
+	    traveler.setIzoztatutakoDirua(traveler.getIzoztatutakoDirua() + ridePriceDesk);
+	    ride.setnPlaces(ride.getnPlaces() - seats);
+	    traveler.addBookedRide(new Booking(ride, traveler, seats));
+
+	    db.merge(ride);
+	    db.merge(traveler);
+	}
+	
+	//This method calculates the ride cost based on the discount and number of seats.
+	private double calculateRideCost(Ride ride, int seats, double desk) {
+	    return (ride.getPrice() - desk) * seats;
+	}
+	
+	//End of bookRide method refactored
 
 	public List<Movement> getAllMovements(User user) {
 		TypedQuery<Movement> query = db.createQuery("SELECT m FROM Movement m WHERE m.user = :user", Movement.class);
