@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BookRideMockBlackTest {
-	/*
+	
     static DataAccess sut;
 
     protected MockedStatic<Persistence> persistenceMock;
@@ -176,5 +176,5 @@ public class BookRideMockBlackTest {
 
         assertEquals(false, result);
     }
-    */
+    
 }
