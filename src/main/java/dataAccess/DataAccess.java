@@ -503,31 +503,33 @@ public class DataAccess {
 	}
 
 	public boolean gauzatuEragiketa(String username, double amount, boolean deposit) {
-		try {
-			db.getTransaction().begin();
-			User user = getUser(username);
-			if (user != null) {
-				double currentMoney = user.getMoney();
-				if (deposit) {
-					user.setMoney(currentMoney + amount);
-				} else {
-					if ((currentMoney - amount) < 0)
-						user.setMoney(0);
-					else
-						user.setMoney(currentMoney - amount);
-				}
-				db.merge(user);
-				db.getTransaction().commit();
-				return true;
-			}
-			db.getTransaction().commit();
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
-	}
+        try {
+            db.getTransaction().begin();
+            boolean result = executeTransaction(username, amount, deposit);
+            db.getTransaction().commit();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            db.getTransaction().rollback();
+            return false;
+        }
+    }
+
+    private boolean executeTransaction(String username, double amount, boolean deposit) {
+        User user = getUser(username);
+        if (user == null) {
+            return false;
+        }
+        updateUserMoney(user, amount, deposit);
+        db.merge(user);
+        return true;
+    }
+
+    private void updateUserMoney(User user, double amount, boolean deposit) {
+        double currentMoney = user.getMoney();
+        double newMoney = deposit ? currentMoney + amount : Math.max(0, currentMoney - amount);
+        user.setMoney(newMoney);
+    }
 
 	public void addMovement(User user, String eragiketa, double amount) {
 		try {
