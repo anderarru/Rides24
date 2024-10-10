@@ -228,4 +228,26 @@ public class GauzatuEragiketaMockBlackTest {
 		assertEquals(true, result);
 		assertEquals(200, user.getMoney(), 0);
 	}
+	
+	@Test
+	// Test 11: Intento de retiro con saldo insuficiente
+	public void test11() {
+	    String username = "user10";
+	    double amount = 50.0;
+	    boolean deposit = false;
+
+	    User user = new Traveler(username,"a");
+	    user.setMoney(20); 
+	    Mockito.when(db.find(User.class, username)).thenReturn(user);
+
+	    Mockito.doNothing().when(et).begin();
+	    Mockito.doNothing().when(et).commit();
+
+	    sut.open();
+	    boolean result = sut.gauzatuEragiketa(username, amount, deposit);
+	    sut.close();
+
+	    assertEquals(false, result);
+	    assertEquals(20, user.getMoney(), 0);
+	}
 }
