@@ -792,22 +792,23 @@ public class DataAccess {
 		}
 		return era;
 	}
-
-	public boolean erreklamazioaBidali(String nor, String nori, Date gaur, Booking booking, String textua,
-			boolean aurk) {
-		try {
-			db.getTransaction().begin();
-
-			Complaint erreklamazioa = new Complaint(nor, nori, gaur, booking, textua, aurk);
-			db.persist(erreklamazioa);
-			db.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
+	
+	//The erreklamazioaBidali method refactored so that it passes an object instead of several parameters.
+	public boolean erreklamazioaBidali(Complaint complaint) {
+	   
+	    try {
+	        db.getTransaction().begin();
+	        
+	        db.persist(complaint);
+	        db.getTransaction().commit();
+	        return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        db.getTransaction().rollback();
+	        return false;
+	    }
 	}
+
 
 	public void updateComplaint(Complaint erreklamazioa) {
 		try {
