@@ -1090,4 +1090,15 @@ public class DataAccess {
 		}
 	}
 
+	public <T> T LortuQueryByField(Class<T> entityClass, String fieldName, Object fieldValue) {
+	    TypedQuery<T> query = db.createQuery(
+	        "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e." + fieldName + " = :fieldValue", 
+	        entityClass
+	    );
+	    query.setParameter("fieldValue", fieldValue);
+	    List<T> resultList = query.getResultList();
+	    return resultList.isEmpty() ? null : resultList.get(0);
+	}
 }
+
+
