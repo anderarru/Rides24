@@ -2,6 +2,7 @@ package businesslogic;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -20,8 +21,10 @@ import domain.Driver;
 import domain.Complaint;
 import domain.Movement;
 import exceptions.RideMustBeLaterThanTodayException;
+import iterator.ExtendedIterator;
 import exceptions.RideAlreadyExistException;
 import java.util.logging.Logger;
+import iterator.ExtendedIteratorImpl;
 //import java.util.logging.Level;
 /**
  * It implements the business logic as a web service.
@@ -53,15 +56,33 @@ public class BLFacadeImplementation implements BLFacade {
 	 */
 	@WebMethod
 	public List<String> getDepartCities() {
-		dbManager.open();
+	    dbManager.open();
+	    System.out.println("Database connection opened.");
 
-		List<String> departLocations = dbManager.getDepartCities();
+	    List<String> departLocations = dbManager.getDepartCities();
+	    if (departLocations == null || departLocations.isEmpty()) {
+	        System.out.println("No cities found in the database.");
+	    } else {
+	        System.out.println("Retrieved cities: " + departLocations);
+	    }
 
-		dbManager.close();
+	    dbManager.close();
+	    System.out.println("Database connection closed.");
 
-		return departLocations;
-
+	    return departLocations;
 	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@WebMethod
+	public ExtendedIterator<String> getDepartingCitiesIterator() {
+	    List<String> citiesList = getDepartCities();
+	    Vector<String> cities = new Vector<>(citiesList); 
+	    return new ExtendedIteratorImpl<>(cities);
+	}
+
 
 	/**
 	 * {@inheritDoc}
